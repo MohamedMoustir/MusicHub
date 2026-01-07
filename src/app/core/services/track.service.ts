@@ -3,7 +3,8 @@ import { StorageService } from '../services/storage.service';
 import { Track ,CreateTrackDTO ,ServiceStatus } from '../models/track';
 import { validateAudioFile, getAudioDuration  } from '../../shared/utils/audio-file.utils';
 import { AUDIO_CONSTANTS } from '../constants/audio.constants';
-
+import { toSignal } from '@angular/core/rxjs-interop'; 
+ 
 @Injectable({
   providedIn: 'root'
 })
@@ -21,6 +22,7 @@ export class TrackService {
   getAllTracks(){
     return this.storage.getAllTracks();
   }
+  public tracks = toSignal(this.storage.getAllTracks(),{initialValue:[]});
 
   async addTrack(file: File, metadata: CreateTrackDTO):Promise<void>{
    this._status.set('loading');
@@ -61,7 +63,7 @@ export class TrackService {
       duration:duration,
       addedDate:new Date()
 
-    };
+    }as Track;
   }
 
 
