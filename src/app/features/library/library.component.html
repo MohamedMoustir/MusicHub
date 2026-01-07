@@ -1,1 +1,89 @@
-<p>library works!</p>
+<div class="min-h-screen bg-gray-50 pb-20">
+
+    <div class="bg-slate-900 text-white pt-10 pb-24 px-4 sm:px-6 lg:px-8">
+        <div class="max-w-7xl mx-auto flex justify-between items-center">
+            <div>
+                <h1 class="text-3xl font-bold tracking-tight">Ma Bibliothèque</h1>
+                <p class="mt-2 text-slate-400">Gérez et écoutez votre collection locale.</p>
+            </div>
+            <a routerLink="/add-track"
+                class="inline-flex items-center px-4 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-lg transition-colors shadow-lg">
+                <i class="bi bi-plus-lg mr-2"></i> Ajouter
+            </a>
+        </div>
+    </div>
+
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-16">
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+            @if (tracks$ | async; as tracks) {
+
+            @for (track of tracks; track track.id) {
+
+            <div
+                class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow duration-300 overflow-hidden border border-gray-100 group cursor-pointer">
+
+                <div class="p-5">
+                    <div class="flex items-start justify-between">
+
+                        <div class="flex items-center space-x-4">
+                            <div
+                                class="h-12 w-12 rounded-full bg-blue-50 flex items-center justify-center text-blue-600 group-hover:bg-blue-600 group-hover:text-white transition-colors">
+                                 <i class="bi bi-music-note-beamed text-xl"></i> 
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="font-bold text-gray-900 truncate" [title]="track.title">{{ track.title }}
+                                </h3>
+                                <p class="text-sm text-gray-500 truncate">{{ track.artist }}</p>
+                            </div>
+                        </div>
+
+                        <button (click)="deleteTrack(track.id!, $event)"
+                            class="text-gray-400 hover:text-red-500 transition-colors p-1">
+                            <i class="bi bi-trash"></i>
+                        </button>
+                    </div>
+
+                    <div class="mt-4 flex items-center justify-between text-xs text-gray-500">
+                        <span class="bg-gray-100 text-gray-600 px-2 py-1 rounded-md font-medium">
+                            {{ track.category }}
+                        </span>
+                        <span class="flex items-center">
+                            <i class="bi bi-clock mr-1"></i>
+                            {{ track.duration | formatTime }}
+                        </span>
+                    </div>
+                </div>
+
+                <div
+                (click) = "onPlay(track)"
+                    class="bg-gray-50 px-5 py-3 border-t border-gray-100 flex justify-between items-center group-hover:bg-blue-50 transition-colors">
+                    <span class="text-xs text-gray-400 group-hover:text-blue-600">Cliquez pour lire</span>
+                   @if(playerService.currentTrack()?.id === track.id && playerService.isPlaying()){
+                                <span>⏸️</span> } @else {
+                                <span>▶️</span> }
+                </div>
+            </div>
+
+            } @empty {
+            <div class="col-span-full text-center py-20 bg-white rounded-xl border border-dashed border-gray-300">
+                <i class="bi bi-music-note-list text-6xl text-gray-300 mb-4 block"></i>
+                <h3 class="text-lg font-medium text-gray-900">Aucune piste trouvée</h3>
+                <p class="text-gray-500 mb-6">Votre bibliothèque est vide.</p>
+                <a routerLink="/add-track" class="text-blue-600 hover:text-blue-800 font-medium">Ajouter maintenant</a>
+            </div>
+            }
+
+            } @else {
+            <div class="col-span-full text-center py-20">
+                <div class="inline-block h-8 w-8 animate-spin rounded-full border-4 border-solid border-current border-r-transparent text-blue-600"
+                    role="status">
+                    <span class="sr-only">Loading...</span>
+                </div>
+            </div>
+            }
+
+        </div>
+    </div>
+</div>
