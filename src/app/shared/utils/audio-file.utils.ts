@@ -1,7 +1,7 @@
 import { AUDIO_CONSTANTS } from "../../core/constants/audio.constants";
 
 export function validateAudioFile(file: File): void {
-    if (AUDIO_CONSTANTS.ALLOWED_MIME_TYPES.includes(file.type)) {
+    if (!AUDIO_CONSTANTS.ALLOWED_MIME_TYPES.includes(file.type)) {
         throw new Error(AUDIO_CONSTANTS.ERRORS.FILE_TOO_LARGE(AUDIO_CONSTANTS.MAX_FILE_SIZE_MB));
     }
 
