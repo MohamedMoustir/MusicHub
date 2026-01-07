@@ -1,1 +1,164 @@
-<p>track-manager works!</p>
+<div class="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+  <div class="max-w-2xl mx-auto">
+    
+    <div class="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100">
+      
+      <div class="bg-slate-900 px-6 py-4 border-b border-gray-800 flex items-center">
+        <i class="bi bi-music-note-beamed text-blue-400 text-xl mr-3"></i>
+        <h2 class="text-xl font-semibold text-white">Ajouter un morceau</h2>
+      </div>
+
+      <div class="p-6 sm:p-8 space-y-6">
+
+        @if (trackService.error()) {
+          <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md flex items-start">
+            <i class="bi bi-exclamation-triangle-fill text-red-500 mt-0.5 mr-3"></i>
+            <div>
+              <p class="text-sm text-red-700 font-medium">Une erreur est survenue</p>
+              <p class="text-sm text-red-600 mt-1">{{ trackService.error() }}</p>
+            </div>
+          </div>
+        }
+
+        <form [formGroup]="trackForm" (ngSubmit)="onSubmit()" class="space-y-6">
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Titre <span class="text-red-500">*</span>
+            </label>
+            <input 
+              type="text" 
+              formControlName="title"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+              [class.border-red-500]="trackForm.get('title')?.invalid && trackForm.get('title')?.touched"
+              placeholder="Ex: Shape of You"
+            >
+            @if (trackForm.get('title')?.touched && trackForm.get('title')?.invalid) {
+              <p class="mt-1 text-sm text-red-600 flex items-center">
+                <i class="bi bi-info-circle mr-1"></i> Ce champ est requis (max 50).
+              </p>
+            }
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Artiste <span class="text-red-500">*</span>
+              </label>
+              <input 
+                type="text" 
+                formControlName="artist"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors"
+                [class.border-red-500]="trackForm.get('artist')?.invalid && trackForm.get('artist')?.touched"
+                placeholder="Ex: Ed Sheeran"
+              >
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">
+                Catégorie <span class="text-red-500">*</span>
+              </label>
+              <div class="relative">
+                <select 
+                  formControlName="category"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none appearance-none bg-white transition-colors cursor-pointer"
+                >
+                  @for (cat of categories; track cat) {
+                    <option [value]="cat">{{ cat }}</option>
+                  }
+                </select>
+                <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-3 text-gray-500">
+                  <i class="bi bi-chevron-down text-xs"></i>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Description <span class="text-gray-400 text-xs font-normal">(Optionnel)</span>
+            </label>
+            <textarea 
+              formControlName="description" 
+              rows="3"
+              class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none transition-colors resize-none"
+              placeholder="Ajoutez une petite note..."
+            ></textarea>
+            <div class="text-right text-xs text-gray-400 mt-1">
+              {{ trackForm.get('description')?.value?.length || 0 }}/200
+            </div>
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Fichier Audio (MP3, WAV) <span class="text-red-500">*</span>
+            </label>
+            <label class="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                   [class.border-red-500]="!selectedAudioFile && trackForm.touched"
+                   [class.bg-red-50]="!selectedAudioFile && trackForm.touched">
+              
+              <div class="flex flex-col items-center justify-center pt-5 pb-6">
+                @if (selectedAudioFile) {
+                  <i class="bi bi-file-earmark-music text-3xl text-green-500 mb-2"></i>
+                  <p class="text-sm text-gray-900 font-medium">{{ selectedAudioFile.name }}</p>
+                  <p class="text-xs text-gray-500">{{ (selectedAudioFile.size / 1024 / 1024).toFixed(2) }} MB</p>
+                } @else {
+                  <i class="bi bi-cloud-upload text-3xl text-gray-400 mb-2"></i>
+                  <p class="text-sm text-gray-500"><span class="font-semibold">Cliquez pour upload</span> ou glissez le fichier</p>
+                  <p class="text-xs text-gray-500">MP3, WAV, OGG (Max 10MB)</p>
+                }
+              </div>
+              <input type="file" class="hidden" (change)="onAudioFileSelected($event)" accept=".mp3,.wav,.ogg" />
+            </label>
+            @if (!selectedAudioFile && trackForm.touched) {
+              <p class="mt-1 text-sm text-red-600">Le fichier audio est obligatoire.</p>
+            }
+          </div>
+
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1">
+              Image de couverture
+            </label>
+            <input 
+              type="file" 
+              (change)="onCoverSelected($event)" 
+              accept="image/*"
+              class="block w-full text-sm text-gray-500
+                file:mr-4 file:py-2 file:px-4
+                file:rounded-full file:border-0
+                file:text-xs file:font-semibold
+                file:bg-blue-50 file:text-blue-700
+                hover:file:bg-blue-100
+                cursor-pointer border border-gray-200 rounded-lg"
+            >
+          </div>
+
+          <div class="flex items-center justify-between pt-6 border-t border-gray-100">
+            <a routerLink="/library" class="text-gray-500 hover:text-gray-900 text-sm font-medium flex items-center transition-colors">
+              <i class="bi bi-arrow-left mr-2"></i> Retour
+            </a>
+
+            <button 
+              type="submit" 
+              [disabled]="trackService.isLoading()"
+              class="inline-flex items-center px-6 py-2.5 bg-blue-600 hover:bg-blue-700 text-white font-medium text-sm rounded-lg shadow-md transition-all focus:ring-4 focus:ring-blue-300 disabled:opacity-70 disabled:cursor-not-allowed"
+            >
+              @if (trackService.isLoading()) {
+                <svg class="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                  <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                  <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                </svg>
+                Traitement...
+              } @else {
+                <span>Enregistrer</span>
+                <i class="bi bi-check2 ml-2"></i>
+              }
+            </button>
+          </div>
+
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
