@@ -120,6 +120,10 @@
                                 class="hover:text-red-500 transition-colors" title="Supprimer">
                                 <i class="bi bi-trash"></i>
                             </button>
+                            <a [routerLink]="['/edit-track', track.id]" (click)="$event.stopPropagation()"
+                                class="text-zinc-400 hover:text-blue-600 transition-colors" title="Modifier">
+                                <i class="bi bi-pencil-square text-lg"></i>
+                            </a>
                         </div>
                     </div>
                 </div>
