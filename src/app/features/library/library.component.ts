@@ -7,12 +7,12 @@ import { FormatTimePipe } from '../../shared/pipes/format-time.pipe';
 import { DomSanitizer, SafeUrl } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
 import { Track } from '../../core/models/track';
-
+import { DragDropModule, CdkDragDrop, moveItemInArray } from '@angular/cdk/drag-drop';
 
 @Component({
   selector: 'app-library',
   standalone: true,
-  imports: [CommonModule, RouterLink, FormatTimePipe, FormsModule],
+  imports: [CommonModule, RouterLink, FormatTimePipe, FormsModule, DragDropModule],
   templateUrl: './library.component.html',
   styleUrl: './library.component.scss'
 })
@@ -91,16 +91,25 @@ export class LibraryComponent {
     this.playerService.setVolume(value);
   }
 
-  previous(){
-         this.playerService.togglePlay();
-  }
-  
-  next(){
-         this.playerService.next();
-  }
-
-  togglePlay(){
+  previous() {
     this.playerService.togglePlay();
   }
 
+  next() {
+    this.playerService.next();
+  }
+
+  togglePlay() {
+    this.playerService.togglePlay();
+  }
+
+  drop(event: CdkDragDrop<Track[]>) {
+    if (this.searchQuery() !== '' || this.selectedFilter() !== 'Tout') {
+      return;
+    }
+
+    const currentList = [...this.allTrack()];
+    moveItemInArray(currentList,event.previousIndex,event.currentIndex);
+    this.allTrack.set(currentList);
+  }
 }
