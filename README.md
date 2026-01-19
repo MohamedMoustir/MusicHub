@@ -1,73 +1,162 @@
 
-# 🎵 Music Player App – Angular
+# 🎵 MusicStream – Application de Gestion et Lecture de Musique Locale
 
-## 📌 Présentation
-Application web permettant d’écouter et d’organiser la musique locale.  
-L’utilisateur peut gérer ses pistes audio et profiter d’un lecteur simple et efficace.
+## 📌 Contexte du projet
 
----
-
-## 👤 Présentation client
-Bonjour,  
-cette application vous permet **d’écouter et organiser votre musique locale**.  
-Vous pouvez :
-- Ajouter, modifier et supprimer des tracks  
-- Classer les morceaux par catégorie musicale  
-- Utiliser un lecteur audio (play, pause, volume, progression)
-
-L’objectif est une **expérience simple, rapide et intuitive**.
+**MusicStream** est une application web développée avec **Angular**, permettant aux utilisateurs d’écouter et d’organiser leur musique locale.
+L’application vise à offrir une **expérience utilisateur fluide**, tout en respectant une **architecture Angular maintenable**, avec une gestion efficace des états grâce aux **Services Angular + RxJS / Signals**.
 
 ---
 
-## 🛠️ Présentation technique
-- Framework : **Angular 17 + TypeScript**
-- Architecture modulaire avec **Lazy Loading**
-- Gestion réactive avec **RxJS & Signals**
-- Stockage des fichiers audio via **IndexedDB**
-- Services :
-  - `AudioPlayerService`
-  - `TrackService`
-  - `StorageService`
-- Formulaires avec **Reactive Forms + validations**
+## 🎯 Objectifs
+
+* Créer une application musicale simple et fonctionnelle
+* Gérer efficacement les fichiers audio locaux et leurs métadonnées
+* Mettre en place une architecture Angular moderne (services, lazy loading, état réactif)
 
 ---
 
-## 🧠 Compétences transversales
-- Communication professionnelle et respectueuse  
-- Analyse du besoin et résolution méthodique des problèmes  
-- Planification via **SCRUM / JIRA (User Stories, Sprints, Backlog)**  
-- Bonne organisation du temps et du travail  
+## ✨ Fonctionnalités principales
+
+### 🎼 Gestion des tracks (CRUD)
+
+Pour chaque track :
+
+* Nom de la chanson (max 50 caractères)
+* Nom du chanteur
+* Description optionnelle (max 200 caractères)
+* Date d’ajout (automatique)
+* Durée de la chanson (calculée automatiquement)
+* Catégorie musicale (pop, rock, rap, etc.)
+
+### 📄 Pages principales
+
+* **Page Bibliothèque**
+
+  * Liste des tracks
+  * Barre de recherche
+  * Filtres par catégorie
+* **Page Track**
+
+  * Détails du track sélectionné
+  * Lecture audio
+
+### ▶️ Lecteur audio
+
+* Play / Pause
+* Next / Previous
+* Contrôle du volume
+* Barre de progression
+* Implémentation via **HTMLAudioElement / Web Audio API**
 
 ---
 
-## ⚙️ Angular – Essentials
-- Angular est un framework **SPA** développé par **Google**, basé sur **TypeScript**
-- Prérequis : Node.js, npm, Angular CLI
-- Avantages : performance, architecture claire, maintenabilité
+## 🧩 Architecture & Services
+
+### 🔹 AudioPlayerService
+
+Gestion de l’état du lecteur :
+
+* États : `playing`, `paused`, `buffering`, `stopped`
+* Contrôles : play, pause, next, previous, volume, progression
+* Gestion réactive avec **BehaviorSubject ou Signals**
+
+### 🔹 TrackService
+
+Gestion CRUD des tracks :
+
+* États : `loading`, `success`, `error`
+* Opérations : create, read, update, delete
+* Communication avec `StorageService`
+
+### 🔹 StorageService
+
+Persistance côté client :
+
+* Stockage des métadonnées
+* Stockage des fichiers audio
+* Gestion des erreurs de lecture/écriture
+* Interface uniforme pour le stockage
 
 ---
 
-## 🔁 RxJS & Signals
-- RxJS : programmation réactive (`map`, `filter`, `reduce`)
-- Observable / Subject / BehaviorSubject
-- Signals : gestion d’état moderne et performante
+## 💾 Gestion des fichiers audio
+
+* Technologie utilisée : **IndexedDB** (adaptée aux fichiers volumineux)
+* Formats supportés : **MP3, WAV, OGG**
+* Taille maximale : **10 MB par fichier**
 
 ---
 
-## 🗂️ Routing & Architecture
-- Modules séparés
-- Lazy loading pour optimiser les performances
-- Routing avec `routerLink`, `router.navigate`, `<router-outlet>`
+## ✅ Validations & Gestion des erreurs
+
+* Validation des champs (Reactive Forms)
+* Validation des formats audio et images
+* Limitation de taille des fichiers
+* Messages d’erreur UI selon les états
+* Gestion des erreurs de stockage
 
 ---
 
-## 💾 Stockage
-- `localStorage` / `sessionStorage` : données simples  
-- **IndexedDB** : stockage des fichiers audio (choisi pour ce projet)
+## ⚙️ Technologies utilisées
+
+* **Angular 17+**
+* **TypeScript**
+* **RxJS / Observables**
+* **Signals (Angular 17+)**
+* **Reactive Forms**
+* **Routing avec Lazy Loading**
+* **Injection de dépendances**
+* **Tailwind CSS / Bootstrap**
 
 ---
 
-## 📦 Gestion du projet
-- Bonne stratégie Git
-- Commits clairs
-- README structuré
+## 🧠 Concepts Angular mis en œuvre
+
+* Components & Modules
+* Services avec RxJS / Signals
+* Data Binding
+* Pipes
+* Observables & Async Pipe
+* Routing & Lazy Loading
+
+---
+
+## ⭐ Bonus implémentables
+
+* Image de couverture pour chaque track (PNG / JPEG)
+* Drag & Drop pour réorganiser les tracks
+* Tests unitaires (Jasmine / Karma)
+* Intégration API Lyrics
+* Dockerisation de l’application
+
+---
+
+## 📦 Livrables
+
+* 🔗 Lien GitHub : *à compléter*
+* 🔗 Lien Jira : *à compléter*
+* 📄 README.md
+
+---
+
+## 📅 Modalités pédagogiques
+
+* Projet individuel
+* Durée : **10 jours**
+* Période : du **05/01/2026 au 16/01/2026**
+* Deadline : **16/01/2026 avant minuit**
+
+---
+
+## 🏁 Critères de performance
+
+* CRUD complet fonctionnel
+* Architecture Angular respectée
+* Gestion d’état avec Services + RxJS / Signals
+* Validations et gestion d’erreurs opérationnelles
+* Code propre et conforme aux standards Angular / TypeScript
+
+---
+
+
